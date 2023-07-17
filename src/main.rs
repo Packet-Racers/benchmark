@@ -45,7 +45,7 @@ async fn sender_routine() -> Result<()> {
   file.read_to_end(&mut file_data)?;
 
   // Receiver address
-  let receiver_address: SocketAddr = "127.0.0.1:2000".parse().unwrap();
+  let receiver_address: SocketAddr = "192.168.0.128:2000".parse().unwrap();
   let bind_addr = "0.0.0.0:2001";
 
   for i in 0..EXECUTION_TIMES {
