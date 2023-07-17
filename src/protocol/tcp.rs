@@ -14,7 +14,7 @@ impl Tcp {
   ) -> Result<()> {
     let packets = file_data.chunks(packet_size).enumerate();
 
-    println!("Sending {} packets of size {}", packets.len(), packet_size);
+    // println!("Sending {} packets of size {}", packets.len(), packet_size);
 
     // Send each packet to the receiver
     for (_packet_num, packet) in packets {

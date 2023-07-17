@@ -16,12 +16,13 @@ impl GuaranteedUdp {
     receiver_address: &SocketAddr,
     packet_size: usize,
     socket: &UdpSocket,
-  ) -> Result<()> {
+  ) -> Result<u32> {
     // let mut file = File::open(file_name)?;
     // let mut file_data = Vec::new();
     // file.read_to_end(&mut file_data)?;
 
     let packets = file_data.chunks(packet_size).enumerate();
+    let mut total_tries = 0;
 
     // println!("Sending {} packets of size {}", packets.len(), packet_size);
 
@@ -59,9 +60,9 @@ impl GuaranteedUdp {
             packet_num + 1,
             retries + 1
           );
+          total_tries += 1;
+          retries += 1;
         }
-
-        retries += 1;
       }
 
       if !ack_received {
@@ -78,7 +79,7 @@ impl GuaranteedUdp {
     // send 0 bytes to signal end of transmission
     socket.send_to(&[], receiver_address).await?;
 
-    Ok(())
+    Ok(total_tries)
   }
 
   pub async fn receive_file(socket: &UdpSocket, packet_size: usize) -> Result<Vec<u8>> {
@@ -119,7 +120,6 @@ impl GuaranteedUdp {
       sorted_data.extend(packet);
     }
 
-    println!("File received successfully.");
     Ok(sorted_data)
   }
 }
